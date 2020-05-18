@@ -1,17 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
-import { Container, Content, List, ListItem, Left,Text, Body, Right } from 'native-base'
+import { Container, Content, List, ListItem, Left,Text, Body, Right, Card, CardItem, Footer, Button, Input, Form, Item, Label, Icon } from 'native-base'
 import HeaderWithArrowBack from '../../components/Header'
 import Axios from 'axios'
 import { API_URL } from '../../supports/constants/urlApi'
 import Loading from '../../components/Loading'
+import ImagePicker from 'react-native-image-picker';
+
+const DataAddress = {
+    address : "Jl. Titiran nomor 2, Bandung",
+    note : "Samping Pos Ronda"
+}
+
 
 const TransactionDetail = (props) => {
     const [data,setData] = useState(null)
+    const [address,setAddress] = useState(null)
 
     useEffect(() => {
-        getData()
+        getData();
+        setAddress(DataAddress)
     }, [])
+
+    const onUploadClick = () => {
+        ImagePicker.showImagePicker({title : "Select Your Image"},(response) => {
+            console.log(response)
+        })
+    }
 
     const getData = () => {
         console.log(props.route.params.transaction_id)
@@ -48,7 +63,7 @@ const TransactionDetail = (props) => {
         })
     }
 
-    if(data === null) return <Loading/>
+    if(data === null || address === null) return <Loading/>
 
     return (
         <Container>
@@ -57,7 +72,54 @@ const TransactionDetail = (props) => {
                 <List>
                     {renderDataToJsx()}
                 </List>
+                <View style={{marginTop : 20,marginHorizontal:10}}>
+                    <Card>
+                        <CardItem header>
+                            <Text>Alamat Pengiriman</Text>
+                        </CardItem>
+                        <CardItem>
+                            <Body>
+                                <Text>Alamat : {address.address}</Text>
+                                <Text>Note : {address.note}</Text>
+                            </Body>
+                        </CardItem>
+                    </Card>
+                </View>
+                <View style={{marginTop : 20,marginHorizontal:10}}>
+                    <Card>
+                        <CardItem header>
+                            <Text>Payment Confirmation</Text>
+                        </CardItem>
+                        <CardItem>
+                            <Content>
+                                <Form>
+                                    <Item>
+                                        <Input placeholder='Nomor Rekening' />
+                                    </Item>
+                                    <Item>
+                                        <Input placeholder='Nama Rekening' />
+                                    </Item>
+                                        <Button onPress={onUploadClick} style={{marginTop:10}} full light iconRight>
+                                            <Text>Upload Bukti</Text>
+                                            <Icon name='camera' />
+                                        </Button>
+                                </Form>
+                            </Content>
+                        </CardItem>
+                    </Card>
+                </View>
             </Content>
+            <Footer style={{paddingHorizontal: 20}}>
+                <Left>
+                </Left>
+                <Body>
+                </Body>
+                <Right>
+                    <Button full rounded light>
+                        <Text>Confirm</Text>
+                    </Button>
+                </Right>
+            </Footer>
         </Container>
     )
 }
