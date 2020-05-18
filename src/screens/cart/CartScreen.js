@@ -86,6 +86,7 @@ class CartScreen extends Component {
             console.log(res.data)
         })
         .catch((err) => {
+            return Alert.alert("Network Error, try again later")
             console.log(err)
         })
     }
@@ -110,6 +111,8 @@ class CartScreen extends Component {
         .then((res) => {
             if(!res.data.error){
                 Alert.alert(res.data.message)
+                this.setState({data : []})
+
             }
         })
     }

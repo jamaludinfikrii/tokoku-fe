@@ -6,7 +6,7 @@ const HeaderWithArrowBack = (props) => {
         <Header>
             <Left>
                 <Button transparent>
-                <Icon name='arrow-back' />
+                <Icon onPress={props.onPressIcon} name='arrow-back' />
                 </Button>
             </Left>
             <Body>
