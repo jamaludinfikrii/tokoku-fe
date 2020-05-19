@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { View, Alert, findNodeHandle } from 'react-native'
 import { Container, Content, List, ListItem, Left,Text, Body, Right, Card, CardItem, Footer, Button, Input, Form, Item, Label, Icon } from 'native-base'
 import HeaderWithArrowBack from '../../components/Header'
 import Axios from 'axios'
@@ -16,6 +16,9 @@ const DataAddress = {
 const TransactionDetail = (props) => {
     const [data,setData] = useState(null)
     const [address,setAddress] = useState(null)
+    const [nomor,setNomor] = useState(null)
+    const [nama,setNama] = useState(null)
+    const [pay_image,setImage] = useState(null) 
 
     useEffect(() => {
         getData();
@@ -24,7 +27,17 @@ const TransactionDetail = (props) => {
 
     const onUploadClick = () => {
         ImagePicker.showImagePicker({title : "Select Your Image"},(response) => {
-            console.log(response)
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+              } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+              } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+              } else {
+                const source = { uri: response.uri , type : response.type, name : response.fileName};
+                console.log(source)
+                setImage(source)
+              }
         })
     }
 
@@ -63,6 +76,28 @@ const TransactionDetail = (props) => {
         })
     }
 
+
+    const onConfirmPayment = () => {
+        if(pay_image && nama && nomor){
+            const fd = new FormData()
+            let dataTrans = {no_rek : nomor,nama : nama}
+            dataTrans = JSON.stringify(dataTrans)
+
+            fd.append('pay_image',pay_image)
+            fd.append('data',dataTrans)
+            console.log(API_URL + "transaction/payment/" + props.route.params.transaction_id)
+            Axios.post(API_URL + "transaction/payment/" + props.route.params.transaction_id,fd)
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }else{
+            return Alert.alert('Error','All Form Must be FIlled')
+        }
+    }
+
     if(data === null || address === null) return <Loading/>
 
     return (
@@ -94,13 +129,13 @@ const TransactionDetail = (props) => {
                             <Content>
                                 <Form>
                                     <Item>
-                                        <Input placeholder='Nomor Rekening' />
+                                        <Input value={nomor} onChangeText={(text) => setNomor(text)} placeholder='Nomor Rekening' />
                                     </Item>
                                     <Item>
-                                        <Input placeholder='Nama Rekening' />
+                                        <Input value={nama} onChangeText={(text) => setNama(text)} placeholder='Nama Rekening' />
                                     </Item>
                                         <Button onPress={onUploadClick} style={{marginTop:10}} full light iconRight>
-                                            <Text>Upload Bukti</Text>
+                                            <Text>{pay_image !== null ? "image selected" : "Upload Bukti"}</Text>
                                             <Icon name='camera' />
                                         </Button>
                                 </Form>
@@ -115,7 +150,7 @@ const TransactionDetail = (props) => {
                 <Body>
                 </Body>
                 <Right>
-                    <Button full rounded light>
+                    <Button onPress={onConfirmPayment} full rounded light>
                         <Text>Confirm</Text>
                     </Button>
                 </Right>

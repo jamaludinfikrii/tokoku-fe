@@ -9,7 +9,7 @@ import ProductRouter from './src/screens/product/ProductRouter'
 const App = () => {
   return (
 	<NavigationContainer>
-    	<ProductRouter/>
+    	<TransactionRouter/>
     </NavigationContainer>
   )
 }
