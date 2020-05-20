@@ -11,10 +11,31 @@ const users_id = 3
 
 const HistoryTransaction = (props) => {
     const [data,setData] = useState(null)
+    const [statusSelected,setStatusSelected] = useState(null)
+
+    // useEffect(() => {
+    //     getDataTransaction()
+    // } ,[])
 
     useEffect(() => {
-        getDataTransaction()
-    } ,[])
+        console.log('trigered')
+        var status = statusSelected === 'Waiting For Payment' ? 1 : statusSelected === 'Waiting For Approvement' ? 2 : statusSelected === 'On Proccess' ? '345' : statusSelected === 'Success' ? '6' : statusSelected === 'Failed' ? '7' : 'all'
+        getDataFiltered(status)
+    } , [statusSelected])
+
+
+    const getDataFiltered = (value) => {
+        Axios.get(API_URL + `transaction/statusfiltered?users_id=${users_id}&status=${value}` )
+        .then((res) => {
+            console.log(res.data)
+            if(!res.data.error){
+                setData(res.data.data)
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
 
     const getDataTransaction = () => {
         Axios.get(API_URL+'transaction/' + users_id)
@@ -56,7 +77,9 @@ const HistoryTransaction = (props) => {
     if(data === null){
         return <Loading />
     }
-    const status = ['All','Waiting For Payment','Waiting For Approvement','On Proccess','Success','Failed']
+
+    // const [statusSelected,setStatusSelected] = useState(null)
+    const status = ['Waiting For Payment','Waiting For Approvement','On Proccess','Success','Failed']
     return (
         <Container>
             <HeaderWithArrowBack title='History' />
@@ -64,8 +87,15 @@ const HistoryTransaction = (props) => {
                 <ScrollView style={{flexDirection : "row",marginVertical:10,padding:10}} horizontal={true}>
                     {
                         status.map((val) => {
+                            if(val === statusSelected){
+                                return(
+                                    <Button onPress={() => setStatusSelected(null)} style={{marginHorizontal:5}} rounded info>
+                                        <Text style={{fontSize:10}}>{val}</Text>
+                                    </Button>
+                                )
+                            }
                             return(
-                                <Button style={{marginHorizontal:5}} rounded bordered info>
+                                <Button onPress={() => setStatusSelected(val)} style={{marginHorizontal:5}} rounded bordered info>
                                     <Text style={{fontSize:10}}>{val}</Text>
                                 </Button>
                             )
