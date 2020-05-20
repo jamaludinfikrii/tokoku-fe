@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { View,ScrollView } from 'react-native'
 import Axios from 'axios'
 import { API_URL } from '../../supports/constants/urlApi'
-import { Container, Content, List, ListItem, Left, Body, Right,Text } from 'native-base'
+import { Container, Content, List, ListItem, Left, Body, Right,Text, Button } from 'native-base'
 import HeaderWithArrowBack from '../../components/Header'
 import Moment from 'moment'
 import Loading from '../../components/Loading'
@@ -30,7 +30,9 @@ const HistoryTransaction = (props) => {
     const renderDataToJsx = () => {
         return data.map((val) => {
             return(     
-                <ListItem key={val.id} avatar onPress={() => props.navigation.navigate('history-detail',{transaction_id : val.id , status : val.status}) }>
+                <ListItem key={val.id} avatar onPress={() => props.navigation.navigate('history-detail',{transaction_id : val.id , status : val.status , 
+                    onRefresh : () => getDataTransaction()
+                })}>
                     <Left>
                         <View style={{backgroundColor : "grey",height :40,width:40,borderRadius:25,justifyContent:'center',alignItems:'center'}} >
                             <Text style={{color : "white"}}>
@@ -54,11 +56,22 @@ const HistoryTransaction = (props) => {
     if(data === null){
         return <Loading />
     }
-
+    const status = ['All','Waiting For Payment','Waiting For Approvement','On Proccess','Success','Failed']
     return (
         <Container>
             <HeaderWithArrowBack title='History' />
             <Content>
+                <ScrollView style={{flexDirection : "row",marginVertical:10,padding:10}} horizontal={true}>
+                    {
+                        status.map((val) => {
+                            return(
+                                <Button style={{marginHorizontal:5}} rounded bordered info>
+                                    <Text style={{fontSize:10}}>{val}</Text>
+                                </Button>
+                            )
+                        })
+                    }
+                </ScrollView>
                 <List>
                     {renderDataToJsx()}
                 </List>

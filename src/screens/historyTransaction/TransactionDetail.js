@@ -58,7 +58,7 @@ const TransactionDetail = (props) => {
     const renderDataToJsx = () => {
         return data.map((val) => {
             return(
-                <ListItem key={val.id} avatar onPress={() => props.navigation.navigate('history-detail') }>
+                <ListItem key={val.id} avatar>
                     <Left>
                         <View style={{backgroundColor : "grey",height :40,width:40,borderRadius:25,justifyContent:'center',alignItems:'center'}} >
                             <Text style={{color : "white"}}>
@@ -90,7 +90,12 @@ const TransactionDetail = (props) => {
 
             Axios.post(API_URL + "transaction/payment/" + props.route.params.transaction_id,fd)
             .then((res) => {
-                console.log(res.data)
+                if(!res.data.error){
+                    Alert.alert('Success', res.data.message)
+                    return setStatus(2)
+                }else{
+                    return Alert.alert('Error', res.data.message)
+                }
             })
             .catch((err) => {
                 console.log(err)
@@ -104,7 +109,12 @@ const TransactionDetail = (props) => {
 
     return (
         <Container>
-            <HeaderWithArrowBack onPressIcon={() => props.navigation.goBack() } title='Detail Transaction' />
+            <HeaderWithArrowBack onPressIcon={() => {
+                props.route.params.onRefresh()
+                props.navigation.goBack()
+            
+            } } 
+                title='Detail Transaction' />
             <Content>
                 <List>
                     {renderDataToJsx()}
