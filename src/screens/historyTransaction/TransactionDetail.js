@@ -19,6 +19,8 @@ const TransactionDetail = (props) => {
     const [nomor,setNomor] = useState(null)
     const [nama,setNama] = useState(null)
     const [pay_image,setImage] = useState(null) 
+    const [status , setStatus] = useState(props.route.params.status)
+    // console.log(status)
 
     useEffect(() => {
         getData();
@@ -85,7 +87,7 @@ const TransactionDetail = (props) => {
 
             fd.append('pay_image',pay_image)
             fd.append('data',dataTrans)
-            console.log(API_URL + "transaction/payment/" + props.route.params.transaction_id)
+
             Axios.post(API_URL + "transaction/payment/" + props.route.params.transaction_id,fd)
             .then((res) => {
                 console.log(res.data)
@@ -121,40 +123,83 @@ const TransactionDetail = (props) => {
                     </Card>
                 </View>
                 <View style={{marginTop : 20,marginHorizontal:10}}>
-                    <Card>
-                        <CardItem header>
-                            <Text>Payment Confirmation</Text>
-                        </CardItem>
-                        <CardItem>
-                            <Content>
-                                <Form>
-                                    <Item>
-                                        <Input value={nomor} onChangeText={(text) => setNomor(text)} placeholder='Nomor Rekening' />
-                                    </Item>
-                                    <Item>
-                                        <Input value={nama} onChangeText={(text) => setNama(text)} placeholder='Nama Rekening' />
-                                    </Item>
-                                        <Button onPress={onUploadClick} style={{marginTop:10}} full light iconRight>
-                                            <Text>{pay_image !== null ? "image selected" : "Upload Bukti"}</Text>
-                                            <Icon name='camera' />
-                                        </Button>
-                                </Form>
-                            </Content>
-                        </CardItem>
-                    </Card>
+                    {
+                        status === 1 ? 
+                        <Card>
+                            <CardItem header>
+                                <Text>Payment Confirmation</Text>
+                            </CardItem>
+                            <CardItem>
+                                <Content>
+                                    <Form>
+                                        <Item>
+                                            <Input value={nomor} onChangeText={(text) => setNomor(text)} placeholder='Nomor Rekening' />
+                                        </Item>
+                                        <Item>
+                                            <Input value={nama} onChangeText={(text) => setNama(text)} placeholder='Nama Rekening' />
+                                        </Item>
+                                            <Button onPress={onUploadClick} style={{marginTop:10}} full light iconRight>
+                                                <Text>{pay_image !== null ? "image selected" : "Upload Bukti"}</Text>
+                                                <Icon name='camera' />
+                                            </Button>
+                                    </Form>
+                                </Content>
+                            </CardItem>
+                        </Card>
+                        : status === 2 ?
+                        <Card>
+                            <CardItem header>
+                                <Text>Your Payment Waiting for Approvement</Text>
+                            </CardItem>
+                        </Card>
+                        : status === 3 ?
+                        <Card>
+                            <CardItem header>
+                                <Text>On Packaging By Seller</Text>
+                            </CardItem>
+                        </Card>
+                        :status === 4 ?
+                        <Card>
+                            <CardItem header>
+                                <Text>On Delivery</Text>
+                            </CardItem>
+                        </Card>
+                        :status === 5?
+                        <Card>
+                            <CardItem header>
+                                <Text>Delivered</Text>
+                            </CardItem>
+                        </Card>
+                        : status === 6 ?
+                        <Card>
+                            <CardItem header>
+                                <Text>Success</Text>
+                            </CardItem>
+                        </Card>
+                        :
+                        <Card>
+                            <CardItem header>
+                                <Text>Error</Text>
+                            </CardItem>
+                        </Card>
+                    }
+                   
                 </View>
             </Content>
-            <Footer style={{paddingHorizontal: 20}}>
-                <Left>
-                </Left>
-                <Body>
-                </Body>
-                <Right>
-                    <Button onPress={onConfirmPayment} full rounded light>
-                        <Text>Confirm</Text>
-                    </Button>
-                </Right>
-            </Footer>
+            {
+                status === 1 &&
+                <Footer style={{paddingHorizontal: 20}}>
+                    <Left>
+                    </Left>
+                    <Body>
+                    </Body>
+                    <Right>
+                        <Button onPress={onConfirmPayment} full rounded light>
+                            <Text>Confirm</Text>
+                        </Button>
+                    </Right>
+                </Footer>
+            }
         </Container>
     )
 }

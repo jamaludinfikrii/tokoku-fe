@@ -30,7 +30,7 @@ const HistoryTransaction = (props) => {
     const renderDataToJsx = () => {
         return data.map((val) => {
             return(     
-                <ListItem key={val.id} avatar onPress={() => props.navigation.navigate('history-detail',{transaction_id : val.id}) }>
+                <ListItem key={val.id} avatar onPress={() => props.navigation.navigate('history-detail',{transaction_id : val.id , status : val.status}) }>
                     <Left>
                         <View style={{backgroundColor : "grey",height :40,width:40,borderRadius:25,justifyContent:'center',alignItems:'center'}} >
                             <Text style={{color : "white"}}>
