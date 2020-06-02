@@ -10,11 +10,20 @@ import MainNavigation from './src/router/MainNavigation'
 import LoginScreen from './src/screens/authentication/LoginScreen'
 import RegisterScreen from './src/screens/authentication/RegsiterScreen'
 import SplashScreen from './src/screens/authentication/SplashScreen'
+import LoginRegisterRouter from './src/screens/authentication/LoginRegisterRouter'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import { rootReducer } from './src/redux/reducers'
+
+const myStore = createStore(rootReducer)
+
 const App = () => {
   return (
-	<NavigationContainer>
-    	<SplashScreen/>
-    </NavigationContainer>
+    <Provider store={myStore}>
+      <NavigationContainer>
+        <LoginRegisterRouter/>
+      </NavigationContainer>
+    </Provider>
   )
 }
 

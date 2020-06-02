@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Form, Item, Input, Label, Button,Text } from 'native-base';
+import { TouchableOpacity } from 'react-native';
 
-function RegisterScreen (){
+function RegisterScreen (props){
     return(
         <Container>
         <Header />
@@ -26,6 +27,9 @@ function RegisterScreen (){
             <Button style={{marginTop:20}} full primary>
                 <Text>Register</Text>
             </Button>
+            <TouchableOpacity style={{marginTop:20}} onPress={() => props.navigation.navigate('login')}>
+                <Text style={{textAlign : "center"}}>Sudah Punya Akun ? Login</Text>
+            </TouchableOpacity>
           </Form>
         </Content>
       </Container>
