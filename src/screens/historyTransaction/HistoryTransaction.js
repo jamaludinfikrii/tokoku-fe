@@ -82,7 +82,7 @@ const HistoryTransaction = (props) => {
     const status = ['Waiting For Payment','Waiting For Approvement','On Proccess','Success','Failed']
     return (
         <Container>
-            <HeaderWithArrowBack title='History' />
+            {/* <HeaderWithArrowBack title='History' /> */}
             <Content>
                 <ScrollView style={{flexDirection : "row",marginVertical:10,padding:10}} horizontal={true}>
                     {

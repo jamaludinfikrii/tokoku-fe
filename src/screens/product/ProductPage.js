@@ -56,7 +56,7 @@ export default class ProductPage extends Component {
         }
         return (
         <View>
-            <HeaderWithArrowBack title='Product' />
+            {/* <HeaderWithArrowBack title='Product' /> */}
                 <View style={{padding:20}}>
                     {this.renderData()}
                 </View>

@@ -155,9 +155,9 @@ class CartScreen extends Component {
         if(this.state.data.length === 0){
             return(
                 <Container>
-                    <HeaderWithArrowBack 
+                    {/* <HeaderWithArrowBack 
                         title='Cart Page'
-                    />
+                    /> */}
                     <DataEmpty 
                         title= 'Keranjang Masih Kosong'
                     />
@@ -167,7 +167,7 @@ class CartScreen extends Component {
         }
         return (
             <Container>
-                <HeaderWithArrowBack title='Cart Page' />
+                {/* <HeaderWithArrowBack title='Cart Page' /> */}
                 <Content>
                     <List>
                         {this.renderDataToJsx()}
