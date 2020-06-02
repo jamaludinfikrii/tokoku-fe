@@ -1,4 +1,4 @@
-const INITIAL_STATE = 'seto'
+const INITIAL_STATE = null
 
 const userReducer = (state = INITIAL_STATE , action) => {
     return state

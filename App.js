@@ -11,20 +11,23 @@ import LoginScreen from './src/screens/authentication/LoginScreen'
 import RegisterScreen from './src/screens/authentication/RegsiterScreen'
 import SplashScreen from './src/screens/authentication/SplashScreen'
 import LoginRegisterRouter from './src/screens/authentication/LoginRegisterRouter'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 import { createStore } from 'redux'
 import { rootReducer } from './src/redux/reducers'
+import InitialRouter from './src/router/InitialRouter'
 
+// conditional statement, ngecek user ada atau enggak, kalo ada tampilin main navigation, kalo gak ada, tampilin loginregisterrouter
 const myStore = createStore(rootReducer)
 
-const App = () => {
+const App = (props) => {
   return (
     <Provider store={myStore}>
       <NavigationContainer>
-        <LoginRegisterRouter/>
+        <InitialRouter />
       </NavigationContainer>
     </Provider>
   )
 }
+
 
 export default App

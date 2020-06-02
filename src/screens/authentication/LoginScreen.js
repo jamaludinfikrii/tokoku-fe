@@ -4,7 +4,7 @@ import { Alert ,TouchableOpacity} from 'react-native'
 import { connect } from 'react-redux';
 
 function LoginScreen (props){
-    
+    // 
 
     return(
         <Container>
