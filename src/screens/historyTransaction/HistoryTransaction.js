@@ -6,6 +6,7 @@ import { Container, Content, List, ListItem, Left, Body, Right,Text, Button } fr
 import HeaderWithArrowBack from '../../components/Header'
 import Moment from 'moment'
 import Loading from '../../components/Loading'
+import { connect } from 'react-redux'
 
 const users_id = 3
 
@@ -25,7 +26,7 @@ const HistoryTransaction = (props) => {
 
 
     const getDataFiltered = (value) => {
-        Axios.get(API_URL + `transaction/statusfiltered?users_id=${users_id}&status=${value}` )
+        Axios.get(API_URL + `transaction/statusfiltered?users_id=${props.id}&status=${value}` )
         .then((res) => {
             console.log(res.data)
             if(!res.data.error){
@@ -38,7 +39,7 @@ const HistoryTransaction = (props) => {
     }
 
     const getDataTransaction = () => {
-        Axios.get(API_URL+'transaction/' + users_id)
+        Axios.get(API_URL+'transaction/' + props.id)
         .then((res) => {
             setData(res.data.data)
             console.log(res.data)
@@ -106,7 +107,15 @@ const HistoryTransaction = (props) => {
                     {renderDataToJsx()}
                 </List>
             </Content>
+            
         </Container>
     )
 }
-export default HistoryTransaction
+const mapStateToProps = (state) => {
+    return{
+        id : state.user.id
+    }
+}
+
+
+export default connect(mapStateToProps)(HistoryTransaction)

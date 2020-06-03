@@ -6,6 +6,7 @@ import Loading from '../../components/Loading'
 import DataEmpty from '../../components/DataEmpty'
 import Axios from 'axios'
 import { API_URL } from '../../supports/constants/urlApi'
+import { connect } from 'react-redux'
 
 
 class CartScreen extends Component {
@@ -77,7 +78,7 @@ class CartScreen extends Component {
     }
 
     getData = () => {
-        Axios.get(API_URL + "cart/3")
+        Axios.get(API_URL + "cart/" + this.props.user.id)
         .then((res) => {
             if(!res.data.error){
                 this.setState({data :res.data.data})
@@ -189,5 +190,11 @@ class CartScreen extends Component {
         )
     }
 }
+const mapStateToProps = (state) => {
+    return{
+        user : state.user
+    }
+}
 
-export default CartScreen
+
+export default connect(mapStateToProps)(CartScreen);

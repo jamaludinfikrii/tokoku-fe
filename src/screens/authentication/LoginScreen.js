@@ -57,7 +57,7 @@ function LoginScreen (props){
   }
     // kirim username dan password ke backend
     // check di db username dan password valid atau enggak
-    // kalau valid => kita taruh di global state
+    // kalau valid => kita taruh di global state , di async storage
     // kalau gak => munculin error
 
     return(
