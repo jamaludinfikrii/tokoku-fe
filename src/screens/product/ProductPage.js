@@ -6,8 +6,9 @@ import { Image, SafeAreaView } from 'react-native'
 import Shoping from './../../supports/icons/shopping.png'
 import HeaderWithArrowBack from '../../components/Header'
 import { ScrollView } from 'react-native-gesture-handler'
+import { connect } from 'react-redux'
 
-export default class ProductPage extends Component {
+class ProductPage extends Component {
 
     state = {
         data : null
@@ -58,9 +59,18 @@ export default class ProductPage extends Component {
         <View>
             {/* <HeaderWithArrowBack title='Product' /> */}
                 <View style={{padding:20}}>
+                    <Text> Selamat Datang {this.props.data.username}</Text>
                     {this.renderData()}
                 </View>
         </View>
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return{
+        data : state.user
+    }
+}
+
+export default connect(mapStateToProps)(ProductPage);

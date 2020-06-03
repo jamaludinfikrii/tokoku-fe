@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react';
 import { Container, Header, Content, Form, Item, Input, Label, Button,Text } from 'native-base';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Alert ,TouchableOpacity} from 'react-native'
 import { connect } from 'react-redux';
 import Axios from 'axios';
@@ -12,6 +13,18 @@ function LoginScreen (props){
   const [password,setpassword] = useState(null)
   const [loading,setLoading] = useState(false)
 
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('data_user', jsonValue)
+      console.log('success async storage')
+      // setiap refresh, ambil data di async storage, trus simpen lagi di global state
+      // global_state / state lainnya / variabel = temporary
+      // async storage = Persistent
+    } catch (e) {
+      console.log(e)
+    }
+  }
   const onLoginButtonClick = () => {
     setLoading(true)
     if(username && password){
@@ -22,7 +35,11 @@ function LoginScreen (props){
         console.log(res)
         if(res.data.length > 0){
           props.saveUserData(res.data[0])
+          storeData(res.data[0])
+
+          // {username : "" , password : "" , email : "" ,id : }
           // user ada => simpan ke global state
+          // simpen di asyncstorage
         }else{
           Alert.alert('Error' , "Username or Password Invalid")
           // user gak ada
