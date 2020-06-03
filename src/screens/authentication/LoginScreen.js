@@ -4,6 +4,7 @@ import { Alert ,TouchableOpacity} from 'react-native'
 import { connect } from 'react-redux';
 import Axios from 'axios';
 import { API_URL } from '../../supports/constants/urlApi';
+import { saveUserData } from '../../redux/actions/userAction';
 
 function LoginScreen (props){
   // const [state_name, state_action] = useState(initial_state)
@@ -18,7 +19,14 @@ function LoginScreen (props){
       console.log(password)
       Axios.post(API_URL + 'auth/login', {username : username , password : password})
       .then((res) => {
-        console.log(res.data)
+        console.log(res)
+        if(res.data.length > 0){
+          props.saveUserData(res.data[0])
+          // user ada => simpan ke global state
+        }else{
+          Alert.alert('Error' , "Username or Password Invalid")
+          // user gak ada
+        }
         setLoading(false)
       })
       .catch((err) => {
@@ -71,4 +79,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(LoginScreen);
+export default connect(mapStateToProps,{saveUserData})(LoginScreen);

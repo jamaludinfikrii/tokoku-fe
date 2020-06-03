@@ -1,7 +1,11 @@
 const INITIAL_STATE = null
 
 const userReducer = (state = INITIAL_STATE , action) => {
-    return state
+    if(action.type === 'SAVE_USER_DATA'){
+        return action.payload
+    }else{
+        return INITIAL_STATE
+    }
 }
 
 export default userReducer
