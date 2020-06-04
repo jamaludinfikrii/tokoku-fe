@@ -1,4 +1,4 @@
-export const API_URL = 'http://192.168.1.102:4000/'
+export const API_URL = 'http://192.168.1.100:4000/'
 
 // Bikin Screen Pake data Dummy
 // Tembak Database
