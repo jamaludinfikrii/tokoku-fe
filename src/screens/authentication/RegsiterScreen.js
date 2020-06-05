@@ -19,27 +19,20 @@ function RegisterScreen (props){
     // check empty input
     if(username && password && email){
       Alert.alert('masyk')
-
-      OneSignal.push(function() {
-        OneSignal.on('subscriptionChange', function(isSubscribed) {
-          if (isSubscribed) {
-            // The user is subscribed
-            //   Either the user subscribed for the first time
-            //   Or the user was subscribed -> unsubscribed -> subscribed
-            OneSignal.getUserId( function(userId) {
-              // Make a POST call to your server with the user ID
-              Axios.post(API_URL + 'auth/register',{username,email,password,one_signal_id :userId})
-              .then((res) => {
-                // save data user ke global state
-                props.saveUserData(res.data[0])
-              })
-              .catch((err) => {
-                console.log(err)
-              })
-            });
+      Axios.post(API_URL + 'auth/register',{username,email,password})
+      .then((res) => {
+        OneSignal.setExternalUserId( String(res.data[0].id) , (result) => {
+          if(result.push && result.push.success){
+            props.saveUserData(res.data[0])
           }
-        });
-      });
+        })
+        // catet dulu user id ke one signal
+        // save data user ke global state
+        
+      })
+      .catch((err) => {
+        console.log(err)
+      })
       
       // send to server
     }else{
@@ -53,15 +46,15 @@ function RegisterScreen (props){
         <Header />
         <Content style={{padding : 20}}>
           <Form>
-            <Item floatingLabel>
+            <Item>
               <Label>Username</Label>
               <Input onChangeText={(text) => setUsername(text)} value={username} />
             </Item>
-            <Item floatingLabel last>
+            <Item last>
               <Label>Email</Label>
               <Input onChangeText={(text) => setEmail(text)} value={email} />
             </Item>
-            <Item floatingLabel last>
+            <Item last>
               <Label>Password</Label>
               <Input onChangeText={(text) => setPassword(text)} value={password}  />
             </Item>

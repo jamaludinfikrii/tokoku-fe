@@ -65,11 +65,11 @@ function LoginScreen (props){
         <Header />
         <Content style={{padding : 20}}>
           <Form>
-            <Item floatingLabel>
+            <Item>
               <Label>Username {props.user}</Label>
               <Input value={username} onChangeText={(inputText) => setUsername(inputText)}/>
             </Item>
-            <Item floatingLabel last>
+            <Item last>
               <Label>Password</Label>
               <Input value={password} secureTextEntry={true} onChangeText={(inputText) => setpassword(inputText)} />
             </Item>
@@ -97,3 +97,7 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps,{saveUserData})(LoginScreen);
+
+
+// Local Push Notification
+// Server Push Notification
