@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ActivityIndicator, Platform, Alert } from 'react-native'
+import { Text, View, ActivityIndicator, Platform, Alert ,RefreshControl} from 'react-native'
 import { Container, Header, Left, Button, Icon, Body, Right, Footer, Content, List, ListItem, Thumbnail } from 'native-base'
 import HeaderWithArrowBack from '../../components/Header'
 import Loading from '../../components/Loading'
@@ -12,7 +12,8 @@ import { connect } from 'react-redux'
 class CartScreen extends Component {
     state = {
         data:null,
-        totalPrice : 0
+        totalPrice : 0,
+        refreshing : false
     }
 
     componentDidMount(){
@@ -81,7 +82,7 @@ class CartScreen extends Component {
         Axios.get(API_URL + "cart/" + this.props.user.id)
         .then((res) => {
             if(!res.data.error){
-                this.setState({data :res.data.data})
+                this.setState({data :res.data.data,refreshing : false})
                 this.totalPriceCount()
             }
             console.log(res.data)
@@ -119,6 +120,19 @@ class CartScreen extends Component {
     }
 
     renderDataToJsx = () => {
+        if(this.state.data  === null){
+            return(
+                <Loading />
+            )
+        }
+
+        if(this.state.data.length === 0){
+            return(
+                <DataEmpty 
+                    title= 'Keranjang Masih Kosong'
+                />
+            )
+        }
         return this.state.data.map((val,index) => {
             return (
                 <ListItem key={index} thumbnail>
@@ -145,47 +159,58 @@ class CartScreen extends Component {
         })
     }
     render() {
-        if(this.state.data === null){
-            return(
-                <Container>
-                    <HeaderWithArrowBack title='Cart Page' />
-                    <Loading />
-                </Container>
-            )
-        }
-        if(this.state.data.length === 0){
-            return(
-                <Container>
-                    {/* <HeaderWithArrowBack 
-                        title='Cart Page'
-                    /> */}
-                    <DataEmpty 
-                        title= 'Keranjang Masih Kosong'
-                    />
+        // if(this.state.data === null){
+        //     return(
+        //         <Container>
+        //             <HeaderWithArrowBack title='Cart Page' />
+        //             <Loading />
+        //         </Container>
+        //     )
+        // }
+        // if(this.state.data.length === 0){
+        //     return(
+        //         <Container>
+        //             {/* <HeaderWithArrowBack 
+        //                 title='Cart Page'
+        //             /> */}
+        //             <DataEmpty 
+        //                 title= 'Keranjang Masih Kosong'
+        //             />
 
-                </Container>
-            )
-        }
+        //         </Container>
+        //     )
+        // }
         return (
             <Container>
                 {/* <HeaderWithArrowBack title='Cart Page' /> */}
-                <Content>
+                <Content refreshControl={
+                    <RefreshControl refreshing={this.state.refreshing} onRefresh={() => {
+                        this.setState({refreshing : true})
+                        this.getData()
+                    }} />
+                }>
                     <List>
                         {this.renderDataToJsx()}
                     </List>
                 </Content>
-                <Footer style={{paddingHorizontal: 20}}>
-                    <Left>
-                        <Text style={{color : Platform.OS==='ios' ? "black" : "white" }}>Rp. {this.state.totalPrice}</Text>
-                    </Left>
-                    <Body>
-                    </Body>
-                    <Right>
-                        <Button onPress={this.createTwoButtonAlert} full rounded light>
-                            <Text>Bayar</Text>
-                        </Button>
-                    </Right>
-                </Footer>
+                {
+                    this.state.data === null || this.state.data.length === 0 ? 
+                    null
+                        :
+                    <Footer style={{paddingHorizontal: 20}}>
+                        <Left>
+                            <Text style={{color : Platform.OS==='ios' ? "black" : "white" }}>Rp. {this.state.totalPrice}</Text>
+                        </Left>
+                        <Body>
+                        </Body>
+                        <Right>
+                            <Button onPress={this.createTwoButtonAlert} full rounded light>
+                                <Text>Bayar</Text>
+                            </Button>
+                        </Right>
+                    </Footer>
+
+                }
             </Container>
         )
     }
