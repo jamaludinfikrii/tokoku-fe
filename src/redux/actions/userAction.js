@@ -6,6 +6,13 @@ export const saveUserData = (data) => {
 }
 
 
+export const clearUserData = () => {
+    return {
+        type : "CLEAR_USER_DATA"
+    }
+}
+
+
 
 
 

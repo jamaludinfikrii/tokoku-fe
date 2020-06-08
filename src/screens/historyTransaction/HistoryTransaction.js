@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View,ScrollView } from 'react-native'
+import { View,ScrollView,RefreshControl } from 'react-native'
 import Axios from 'axios'
 import { API_URL } from '../../supports/constants/urlApi'
 import { Container, Content, List, ListItem, Left, Body, Right,Text, Button } from 'native-base'
@@ -13,6 +13,7 @@ const users_id = 3
 const HistoryTransaction = (props) => {
     const [data,setData] = useState(null)
     const [statusSelected,setStatusSelected] = useState(null)
+    const [refreshing,setRefreshing] = useState(false)
 
     // useEffect(() => {
     //     getDataTransaction()
@@ -31,6 +32,7 @@ const HistoryTransaction = (props) => {
             console.log(res.data)
             if(!res.data.error){
                 setData(res.data.data)
+                setRefreshing(false)
             }
         })
         .catch((err) => {
@@ -84,7 +86,13 @@ const HistoryTransaction = (props) => {
     return (
         <Container>
             {/* <HeaderWithArrowBack title='History' /> */}
-            <Content>
+            <Content refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={() => {
+                    setRefreshing(true)
+                    var status = statusSelected === 'Waiting For Payment' ? 1 : statusSelected === 'Waiting For Approvement' ? 2 : statusSelected === 'On Proccess' ? '345' : statusSelected === 'Success' ? '6' : statusSelected === 'Failed' ? '7' : 'all'
+                    getDataFiltered(status)
+                }} />
+            } >
                 <ScrollView style={{flexDirection : "row",marginVertical:10,padding:10}} horizontal={true}>
                     {
                         status.map((val) => {
