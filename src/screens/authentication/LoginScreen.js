@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Axios from 'axios';
 import { API_URL } from '../../supports/constants/urlApi';
 import { saveUserData } from '../../redux/actions/userAction';
+import OneSignal from 'react-native-onesignal';
 
 function LoginScreen (props){
   // const [state_name, state_action] = useState(initial_state)
@@ -34,17 +35,25 @@ function LoginScreen (props){
       .then((res) => {
         console.log(res)
         if(res.data.length > 0){
-          props.saveUserData(res.data[0])
-          storeData(res.data[0])
+          OneSignal.setExternalUserId( String(res.data[0].id), (result) => {
+            if(result.push.success){
+              props.saveUserData(res.data[0])
+              storeData(res.data[0])
+              setLoading(false)
+
+            }
+          })
+          
 
           // {username : "" , password : "" , email : "" ,id : }
           // user ada => simpan ke global state
           // simpen di asyncstorage
         }else{
           Alert.alert('Error' , "Username or Password Invalid")
+          setLoading(false)
+
           // user gak ada
         }
-        setLoading(false)
       })
       .catch((err) => {
         console.log(err)

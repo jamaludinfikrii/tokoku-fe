@@ -98,7 +98,7 @@ class CartScreen extends Component {
             total_transaction : this.state.totalPrice,
             total_item : this.state.data.length,
             status : 1,
-            users_id : 3
+            users_id : this.props.user.id
         }
         let dataTransactionDetail = this.state.data.map((val) => {
             return {
