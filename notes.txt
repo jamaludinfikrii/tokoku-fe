@@ -1,0 +1,22 @@
+// React Native Core Components
+// Styling React Native
+// Dimension
+// Hooks (Functional Components), use Effect, use State
+// React Navigation
+// Auth dengan React Navigation, Redux (Biar gampang di akses di semua komp) 
+and Asynch Storage (Biar data nya persistent)
+
+// Redux ==> 2 Part ==> Get (mapStateToProps) || Update (Action)
+// Asynch Storage
+// One Signal Push Notification 
+  // Push to all users
+  // Push to segments
+  // Pust to Spesific Device -- External User id
+
+// Refresh Control , Logout
+
+
+// React Native Animated Module
+// React Native Google Maps
+
+// Redis
