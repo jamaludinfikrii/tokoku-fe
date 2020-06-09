@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
  
 class Account extends React.Component{
     onPressHandler = () => {
-        Alert.alert("Logout","Are You Sure Want to Logout?",[{text : "Cancel" },{text:'Yes',onPress:this.onLogoutHandler}])
+        Alert.alert("Logout","Are You Sure Want to Logout?",[{text : "Cancel" }
+        ,{text:'Yes',onPress:this.onLogoutHandler}])
     }
 
     onLogoutHandler = () => {
@@ -22,10 +23,8 @@ class Account extends React.Component{
             <View style={{flex : 1,justifyContent : "center"}}>
                 <View style={{marginHorizontal : 30}}>
                     <Button 
-                        
                         title='Logout'
                         onPress={this.onPressHandler}
-                        
                     />
                 </View>
             </View>

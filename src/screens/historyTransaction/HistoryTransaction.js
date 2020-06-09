@@ -127,3 +127,7 @@ const mapStateToProps = (state) => {
 
 
 export default connect(mapStateToProps)(HistoryTransaction)
+
+
+// hapus data user di local storage
+// hapus data user di redux
